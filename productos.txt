@@ -1,0 +1,3 @@
+{"id": 1, "name": "Galaxy S22 Ultra", "price":150000}
+{"id": 2, "name": "Galaxy Note", "price":170000}
+{"id": 3, "name": "Galaxy Tablet Ultra", "price":190000}
