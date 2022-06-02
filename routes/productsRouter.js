@@ -2,7 +2,6 @@ const { Router } = require('express')
 const Container = require('../container')
 const products = new Container('productos.json')
 
-//products.init();
 
 const router = Router()
 
@@ -45,15 +44,11 @@ router.post('/', async (req, res) => {
     const { title, price} = req.body
 
     await products.save({title, price})
-    //await products.init()
+   
 
     res.send({ message: "Producto agregado correctamente"})
 }) 
-/* router.post("/", (request, resolve) => {
-    const newData = request.body
-    products.save(newData);
-    resolve.send("Product saved")
-  }) */
+
 
 router.put('/:id', async (req, res) => {
     try {

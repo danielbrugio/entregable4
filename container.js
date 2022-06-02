@@ -8,57 +8,14 @@ class Container {
 
         try {
             console.log('Initializing...')
-           // this.init()
+         
         }
         catch(error) {
             console.log(`Error Initializing ${error}`)
         }
     }
 
-    /* async init() {
-        this.data = await this.getAll()
-    }  */
-
-        /* try {
-            this.read()
-        } catch (error) {
-            console.log('File doesnt exist')
-            this.write()
-        }
-    }*/
-
-    /* async write() {
-        try {
-            await fs.promises.writeFile(this.filename, JSON.stringify(this.data, null, 2))
-            return console.log('Data saved!')
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async read() {
-        try {
-            const data = await fs.promises.readFile(this.filename)
-            this.data = JSON.parse(data)
-            console.log('Data loaded!')
-        } catch (error) {
-            console.log(error)
-        }
-    }  */
-
-    /* getLastId() {
-        const dataLength = this.data.length
-        if (dataLength < 1) return 0
-        return this.data[this.data.length - 1].id
-    } */
-
-    /* save(obj) {
-        const id = this.getLastId()
-        this.data.push({
-            ...obj, ...{ id: id + 1 }
-        })
-        this.write()
-    } */
+    
     async save(obj) {
         try {
             await this.init()
@@ -85,15 +42,7 @@ class Container {
         }
     }
 
-    /* async getAll() {
-        try {
-            const allContent = await fs.promises.readFile(this.filename, 'utf-8')
-            const content = JSON.parse(allContent)
-            return content;
-        } catch (error) {
-            console.log(error)
-        }
-    } */
+
 
     async getById(id) {
         try {
