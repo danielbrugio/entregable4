@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const Container = require('../container')
-const products = new Container('productos.json')
+const products = new Container('productos.txt')
 
 
 const router = Router()
@@ -63,5 +63,6 @@ router.put('/:id', async (req, res) => {
     }
 
 })
+
 
 module.exports = router;

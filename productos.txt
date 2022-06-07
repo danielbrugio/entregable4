@@ -1,3 +1,4 @@
-{"id": 1, "name": "Galaxy S22 Ultra", "price":150000}
-{"id": 2, "name": "Galaxy Note", "price":170000}
-{"id": 3, "name": "Galaxy Tablet Ultra", "price":190000}
+{"title": "Samsung Galaxy","price": 1000,"id": 1}
+{"title": "Samsung Note","price": 200,"id": 2}
+{"title": "Samsung TV","price": 6000,"id": 3}
+{"title": "Samsung Tablet","price": 5000,"id": 4}

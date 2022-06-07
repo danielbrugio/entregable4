@@ -1,29 +1,31 @@
-const fs = require("fs");
+const fs = require('fs')
 
-class Container {
-
-    constructor(filename) {
-        this.filename = filename
+class Contenedor {
+    constructor(nombreArchivo) {
+        this.archivo = nombreArchivo
         this.data = []
 
         try {
             console.log('Initializing...')
-         
+            this.init()
         }
         catch(error) {
             console.log(`Error Initializing ${error}`)
         }
     }
 
-    
-    async save(obj) {
+    async init() {
+        this.data = await this.getAll()
+    }
+
+    async save(objeto) {
         try {
             await this.init()
-            obj = {...obj, id: this.data.length + 1}
+            objeto = {...objeto, id: this.data.length + 1}
             console.log(this.data)
-            this.data.push(obj)
-            await fs.promises.appendFile(this.archivo, JSON.stringify(obj) + '\n')
-            return obj.id
+            this.data.push(objeto)
+            await fs.promises.appendFile(this.archivo, JSON.stringify(objeto) + '\n')
+            return objeto.id
         }
         catch (error) {
             console.log(error)
@@ -32,67 +34,70 @@ class Container {
 
     async getAll() {
         try {
-            let allContent = await fs.promises.readFile(this.filename, 'utf-8')
-            let objSwap = allContent.split('\n').filter(obj => obj != '')
-            let content = objSwap.map(obj => JSON.parse(obj))
-            return content
+            let objetosJSON = await fs.promises.readFile(this.archivo, 'utf-8')
+            let objSwap = objetosJSON.split('\n').filter(obj => obj != '')
+            let objetos = objSwap.map(obj => JSON.parse(obj))
+            return objetos
         }
         catch (error) {
             console.log(error)
         }
     }
 
-
-
     async getById(id) {
         try {
-            const allContent = await fs.promises.readFile(this.filename, 'utf-8');
-            const content = JSON.parse(allContent);
-            const contentById = content.find((i) => i.id == id);
-            return contentById;
-        } catch (error) {
-            console.log(error);
-        };
+            let productos = await this.getAll()
+            let coincidencia = null
+            productos.forEach(product => {
+                if (product.id === id) {
+                    coincidencia = product
+                }
+            })
+            return coincidencia
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
-    
+
+    async deleteAll() {
+        try {
+            await fs.promises.writeFile(this.archivo, '')
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    async editById(id, campo, valor) {
+        try {
+            let productos = await this.getAll();
+            let producto = productos.filter(producto => producto.id === id);
+            producto[campo] = valor;
+            const index = productos.findIndex(producto => producto.id === id);
+
+            productos.splice(index, 1, producto);
+
+            const productosParsed = JSON.stringify(productos);
+
+            await fs.promises.writeFile(this.archivo, productosParsed)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     async deleteById(id) {
-
         try {
-            const allContent = await fs.promises.readFile(this.filename, 'utf-8');
-            const content = JSON.parse(allContent);
-            const product = content.filter((i) => i.id !== id);
-            await fs.promises.writeFile(this.filename, JSON.stringify(product, null, 2));
-        } catch (error) {
-            console.log(error)
+            let productos = await this.getAll()
+            let productosCargar = productos.filter(obj => obj.id !== id)
+            this.deleteAll()
+            productosCargar.forEach(obj => fs.promises.appendFile(this.archivo, JSON.stringify(obj) + '\n'))
         }
-    };
-
-    deleteAll() {
-        this.data = []
-        this.write()
-    };
-
-
-
-    async updateItems(product) {
-        try {
-            const allContent = await fs.promises.readFile(this.filename, 'utf-8');
-            const content = JSON.parse(allContent);
-
-            let indx = content.findIndex((item) => item.id === product.id);
-            if (indx == -1) {
-                return { error }
-            } else {
-                content[indx].item = product.item;
-                content[indx].price = product.price;
-                
-                await fs.promises.writeFile(this.filename, JSON.stringify(content, null, 2));
-            }
-        } catch (error) {
+        catch (error) {
             console.log(error)
         }
     }
-};
+}
 
-
-module.exports = Container;
+module.exports = Contenedor
